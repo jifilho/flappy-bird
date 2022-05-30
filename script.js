@@ -36,11 +36,28 @@ var fly=new Audio()
 fly.src="sounds/fly.mp3"
 
 var score=new Audio()
-fly.src="sounds/score.mp3"
+score.src="sounds/score.mp3"
+
+//Captura de tecla
+document.addEventListener("keydown",voa)
+
+//Voando
+function voa(){
+    bY=bY-26
+    fly.play()
+}
 
 function jogo(){
     //fundo do jogo
     ctx.drawImage(bg,0,0)
+
+    //desenhando o chão
+    ctx.drawImage(chao,0,canvas.height - chao.height)
+
+    //Desenhando o pássaro
+    ctx.drawImage(bird, bX, bY)
+    bY+=gravity
+
     //DrawImage(imagem,X,Y)
     requestAnimationFrame(jogo)
 }
