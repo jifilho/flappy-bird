@@ -2,19 +2,19 @@ var canvas=document.getElementById("canvas")
 var ctx = canvas.getContext("2d")
 
 //Carregando imagens
-var bird = new image();
+var bird = new Image();
 bird.src="images/bird.png"
 
-var bg = new image();
+var bg = new Image();
 bg.src="images/bg.png"
 
-var chao=new image();
+var chao=new Image();
 chao.src="images/chao.png"
 
-var canocima=new image();
+var canocima=new Image();
 canocima.src="images/canocima.png"
 
-var canobaixo = new image();
+var canobaixo = new Image();
 canobaixo.src="images/canobaixo.png"
 
 //Variáveis
@@ -32,10 +32,10 @@ cano [0] = {
 }
 
 //Carregando sons
-var fly=new audio()
+var fly=new Audio()
 fly.src="sounds/fly.mp3"
 
-var score=new audio()
+var score=new Audio()
 fly.src="sounds/score.mp3"
 
 function jogo(){
