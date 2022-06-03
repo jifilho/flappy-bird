@@ -1,65 +1,104 @@
-var canvas=document.getElementById("canvas")
-var ctx = canvas.getContext("2d")
+var canvas = document.getElementById("canvas");
+var ctx = canvas.getContext("2d");
 
-//Carregando imagens
+// Carregando imagens
 var bird = new Image();
-bird.src="images/bird.png"
-
+bird.src = "images/bird.png"
 var bg = new Image();
-bg.src="images/bg.png"
-
-var chao=new Image();
-chao.src="images/chao.png"
-
-var canocima=new Image();
-canocima.src="images/canocima.png"
-
+bg.src = "images/bg.png"
+var chao = new Image();
+chao.src = "images/chao.png"
+var canocima = new Image();
+canocima.src = "images/canocima.png"
 var canobaixo = new Image();
-canobaixo.src="images/canobaixo.png"
+canobaixo.src = "images/canobaixo.png"
 
-//Variáveis
-var eec = 100
-var constant
-var bX = 33
-var bY = 200
-var gravity = 1.4
-var score = 0
-var cano = []
+// variáveis
+var eec = 100;
+var constant;
+var bX = 33;
+var bY = 200;
+var gravity = 1.4;
+var score = 0;
+var cano = [];
 
-cano [0] = {
-    x: canvas.width,
-    y: 0,
+cano[0] = {
+	x : canvas.width,
+	y : 0
 }
 
-//Carregando sons
-var fly=new Audio()
-fly.src="sounds/fly.mp3"
+// Carregando sons
+var fly = new Audio();
+fly.src = "sounds/fly.mp3"
+var scor = new Audio();
+scor.src = "sounds/score.mp3"
+	
+	// Captura de tecla
+	document.addEventListener("keydown",voa);
 
-var score=new Audio()
-score.src="sounds/score.mp3"
+	// voando
+	function voa(){
+		bY = bY - 26;
+		fly.play();
+	}
 
-//Captura de tecla
-document.addEventListener("keydown",voa)
 
-//Voando
-function voa(){
-    bY=bY-26
-    fly.play()
-}
 
 function jogo(){
-    //fundo do jogo
-    ctx.drawImage(bg,0,0)
+	// fundo do jogo
+	ctx.drawImage(bg,0,0);
+	// drawImage(imagem,X,Y)
 
-    //desenhando o chão
-    ctx.drawImage(chao,0,canvas.height - chao.height)
+	// Criando canos
+	for(let i = 0; i< cano.length; i++){
+		// Posição do cano de baixo
+		constant = canocima.height + eec;
+		// Configurando o cano de cima
+		ctx.drawImage(canocima, cano[i].x, cano[i].y);
+		// Configurando o cano de baixo
+		ctx.drawImage(canobaixo, cano[i].x, cano[i].y+constant)
+		// Movimentação do cano
+		cano[i].x = cano[i].x - 1
+		// Criar novos canos
+		if(cano[i].x == 125){
+			cano.push({
+				x : canvas.width,
+				y : Math.floor(Math.random()*canocima.height)-canocima.height
+			})
+		}
+		// Pássaro entre as bordas do cano
+		if(bX + bird.width >= cano[i].x && bX <= cano[i].x + canocima.width
+			// Pássaro colidiu com o cano de cima ou com o cano de baixo
+			&& (bY <= cano[i].y + canocima.height || bY+bird.height >= cano[i].y+constant)
+			// Passaro colidiu com o chão
+			|| bY + bird.height >= canvas.height - chao.height){
+			location.reload();
+		}
 
-    //Desenhando o pássaro
-    ctx.drawImage(bird, bX, bY)
-    bY+=gravity
+		// Marcando pontos
+		if(cano[i].x == 5){
+			score = score + 1;
+			scor.play();
+		}
 
-    //DrawImage(imagem,X,Y)
-    requestAnimationFrame(jogo)
+
+
+	}
+
+
+	// desenhando o chão
+	ctx.drawImage(chao,0,canvas.height - chao.height);
+
+	// passaro
+	ctx.drawImage(bird,bX,bY);
+	bY += gravity;
+
+	// Criando o placar
+	ctx.fillStyle = "#000";
+	ctx.font = "20px Verdana";
+	ctx.fillText("Placar: " + score, 10, canvas.height-20);
+	
+	requestAnimationFrame(jogo);
 }
 
-jogo()
+jogo();
